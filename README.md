@@ -1,4 +1,4 @@
-# prism1.0 - OMD Fleet Route Verification
+# prism1.2 - OMD Fleet Route Verification
 
 A web-based fleet route verification application built with Leaflet.js for visualizing and verifying driver routes, geofences, and fleet operations.
 
