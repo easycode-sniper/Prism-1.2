@@ -1088,16 +1088,16 @@ svg.leaflet-image-layer.leaflet-interactive path {
         .tab-btn:not(.active):hover{ color:var(--text); background:var(--panel-3); }
 
         #topbar-stats{ display:flex; align-items:center; gap:14px; font-family:'IBM Plex Mono', monospace; font-size:.8rem; color:var(--text-dim); }
-        #theme-toggle{
-            display:flex; gap:2px; background:var(--panel-2); border:1px solid var(--line);
+        #theme-toggle, #language-toggle{
+            display:inline-flex; gap:2px; background:var(--panel-2); border:1px solid var(--line);
             border-radius:9px; padding:3px;
         }
-        .theme-btn{
-            background:transparent; border:none; font-size:.9rem; padding:5px 9px; border-radius:7px;
-            cursor:pointer; transition:.15s; line-height:1;
+        .theme-btn, .lang-btn{
+            background:transparent; border:none; font-size:.85rem; padding:7px 14px; border-radius:7px;
+            cursor:pointer; transition:.15s; line-height:1; color:var(--text-dim); font-family:'IBM Plex Sans', sans-serif;
         }
-        .theme-btn.active{ background:linear-gradient(135deg, var(--indigo), var(--purple)); }
-        .theme-btn:not(.active):hover{ background:var(--panel-3); }
+        .theme-btn.active, .lang-btn.active{ background:linear-gradient(135deg, var(--indigo), var(--purple)); color:#fff; }
+        .theme-btn:not(.active):hover, .lang-btn:not(.active):hover{ background:var(--panel-3); color:var(--text); }
         #topbar-stats strong{ color:var(--amber); }
 
         /* ---------- Views ---------- */
@@ -1252,6 +1252,21 @@ svg.leaflet-image-layer.leaflet-interactive path {
         .cluster-bubble.cluster-site{ background:radial-gradient(circle at 35% 30%, #ffcf4d, var(--amber)); }
         .cluster-bubble.cluster-truck{ background:radial-gradient(circle at 35% 30%, var(--purple), var(--indigo)); }
 
+        /* ---------- RTL support (Arabic) ----------
+           Covers the main structural layout — sidebar moves to the natural
+           RTL side, text flows right-to-left. Not a full pixel-perfect
+           mirror of every icon/spacing throughout the app. */
+        html[dir="rtl"] body{ text-align:right; }
+        html[dir="rtl"] #view-dispatch{ flex-direction:row-reverse; }
+        html[dir="rtl"] #floating-menu-btn{ left:auto; right:18px; }
+        html[dir="rtl"] #sidebar.collapsed{ margin-left:0; margin-right:-400px; }
+        html[dir="rtl"] #layer-toggle{ right:auto; left:15px; }
+        html[dir="rtl"] .live-fleet-row-main, html[dir="rtl"] .live-fleet-row-meta,
+        html[dir="rtl"] .dash-notif-row, html[dir="rtl"] .geofence-row,
+        html[dir="rtl"] .row-actions{ flex-direction:row-reverse; }
+        html[dir="rtl"] .kpi-row, html[dir="rtl"] .dash-two-col{ direction:rtl; }
+        html[dir="rtl"] table{ text-align:right; }
+
         button.action-btn{
             width:100%; padding:12px; border:none; border-radius:8px; font-size:.92rem; font-weight:600;
             cursor:pointer; margin-top:4px; transition:.15s; font-family:'IBM Plex Sans', sans-serif;
@@ -1358,8 +1373,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
         #fleet-empty .big{ font-size:2.2rem; margin-bottom:10px; }
 
         /* ---------- Wialon test view ---------- */
-        #view-wialon{ flex-direction:column; padding:24px 28px; overflow-y:auto; }
-        #view-geofences{ flex-direction:column; padding:24px 28px; overflow-y:auto; }
+        #view-settings{ flex-direction:column; padding:24px 28px; overflow-y:auto; }
         #view-queue{ flex-direction:column; padding:24px 28px; overflow-y:auto; align-items:center; }
         #view-history{ flex-direction:column; padding:24px 28px; overflow-y:auto; }
         #view-dashboard{ flex-direction:column; padding:24px 28px; overflow-y:auto; }
@@ -1413,29 +1427,23 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <div class="brand">
             <div class="brand-mark">🚚</div>
             <div>
-                <h1>Fleet Route Monitor</h1>
-                <span>OMD Transport &middot; Amouda Line</span>
+                <h1 data-i18n="brand.title">Fleet Route Monitor</h1>
+                <span data-i18n="brand.subtitle">OMD Transport &middot; Amouda Line</span>
             </div>
         </div>
 
         <div id="tabs">
-            <button class="tab-btn" data-view="dashboard">🏠 Dashboard</button>
-            <button class="tab-btn active" data-view="dispatch">🗺️ Dispatch</button>
-            <button class="tab-btn" data-view="monitoring">🔎 Monitoring</button>
-            <button class="tab-btn" data-view="queue">📋 Queue</button>
-            <button class="tab-btn" data-view="fleet">📊 Active Fleet</button>
-            <button class="tab-btn" data-view="history">📜 History</button>
-            <button class="tab-btn" data-view="notifications">🔔 Notifications</button>
-            <button class="tab-btn" data-view="geofences">📍 Geofences</button>
-            <button class="tab-btn" data-view="wialon">🔌 Wialon Test</button>
+            <button class="tab-btn" data-view="dashboard" data-i18n="nav.dashboard">🏠 Dashboard</button>
+            <button class="tab-btn active" data-view="dispatch" data-i18n="nav.dispatch">🗺️ Dispatch</button>
+            <button class="tab-btn" data-view="monitoring" data-i18n="nav.monitoring">🔎 Monitoring</button>
+            <button class="tab-btn" data-view="queue" data-i18n="nav.queue">📋 Queue</button>
+            <button class="tab-btn" data-view="fleet" data-i18n="nav.fleet">📊 Active Fleet</button>
+            <button class="tab-btn" data-view="history" data-i18n="nav.history">📜 History</button>
+            <button class="tab-btn" data-view="notifications" data-i18n="nav.notifications">🔔 Notifications</button>
+            <button class="tab-btn" data-view="settings" data-i18n="nav.settings">⚙️ Settings</button>
         </div>
 
         <div id="topbar-stats">
-            <div id="theme-toggle">
-                <button class="theme-btn active" data-theme="dark" title="Dark theme">🌙</button>
-                <button class="theme-btn" data-theme="light" title="Light theme">☀️</button>
-                <button class="theme-btn" data-theme="black" title="Black theme">⚫</button>
-            </div>
             <span id="topbar-live-stats" style="color:var(--text-dim);"></span>
             <span>Active: <strong id="topbar-active-count">0</strong> / <span id="topbar-fleet-total">—</span></span>
         </div>
@@ -1523,54 +1531,54 @@ svg.leaflet-image-layer.leaflet-interactive path {
                 <div class="live-fleet-panel">
                     <button id="live-tracking-toggle-btn" class="action-btn secondary">📡 Live Fleet OFF</button>
                     <div class="live-fleet-filters">
-                        <label><input type="checkbox" id="filter-dispatched" checked> Dispatched</label>
-                        <label><input type="checkbox" id="filter-idle"> Idle</label>
-                        <label><input type="checkbox" id="filter-offline"> Offline</label>
-                        <label><input type="checkbox" id="filter-all"> All</label>
+                        <label><input type="checkbox" id="filter-dispatched" checked> <span data-i18n="sidebar.filterDispatched">Dispatched</span></label>
+                        <label><input type="checkbox" id="filter-idle"> <span data-i18n="sidebar.filterIdle">Idle</span></label>
+                        <label><input type="checkbox" id="filter-offline"> <span data-i18n="sidebar.filterOffline">Offline</span></label>
+                        <label><input type="checkbox" id="filter-all"> <span data-i18n="sidebar.filterAll">All</span></label>
                     </div>
-                    <input type="text" id="live-fleet-search" class="search-input" placeholder="Search driver or truck ID...">
+                    <input type="text" id="live-fleet-search" class="search-input" data-i18n="sidebar.searchPlaceholder" placeholder="Search driver or truck ID...">
                     <div id="live-fleet-list"></div>
                 </div>
 
                 <hr>
 
-                <div class="section-label"><span class="num">1</span> Select Truck(s)</div>
+                <div class="section-label"><span class="num">1</span> <span data-i18n="sidebar.step1">Select Truck(s)</span></div>
                 <div class="form-group">
-                    <input type="text" id="truck-search" class="search-input" placeholder="Type truck ID to filter...">
+                    <input type="text" id="truck-search" class="search-input" data-i18n="sidebar.truckSearchPlaceholder" placeholder="Type truck ID to filter...">
                     <div id="truck-list"></div>
                     <div class="convoy-chips" id="convoy-chips"></div>
                 </div>
 
-                <div class="section-label"><span class="num">2</span> Route</div>
+                <div class="section-label"><span class="num">2</span> <span data-i18n="sidebar.step2">Route</span></div>
                 <div class="form-group">
-                    <label for="factory-select">Starting factory</label>
+                    <label for="factory-select" data-i18n="sidebar.startingFactory">Starting factory</label>
                     <select id="factory-select">
                         <option value="amouda">Usine Amouda Ciment (El Baida)</option>
                     </select>
 
-                    <label for="site-search">Destination — client or site name</label>
-                    <input type="text" id="site-search" class="search-input" placeholder="Type client name or town...">
+                    <label for="site-search" data-i18n="sidebar.destination">Destination — client or site name</label>
+                    <input type="text" id="site-search" class="search-input" data-i18n="sidebar.destinationSearchPlaceholder" placeholder="Type client name or town...">
                     <select id="site-select" size="6">
                         <option value="">-- Select Destination Site --</option>
                     </select>
 
-                    <button id="start-btn" class="action-btn">&#9654; Start Tracking Run</button>
+                    <button id="start-btn" class="action-btn" data-i18n="sidebar.startBtn">&#9654; Start Tracking Run</button>
                 </div>
 
                 <hr>
 
-                <div class="section-label"><span class="num">3</span> Verify Position</div>
+                <div class="section-label"><span class="num">3</span> <span data-i18n="sidebar.step3">Verify Position</span></div>
                 <div class="form-group">
-                    <label for="active-trucks">Active run</label>
+                    <label for="active-trucks" data-i18n="sidebar.activeRun">Active run</label>
                     <select id="active-trucks">
                         <option value="">-- Select Monitored Truck --</option>
                     </select>
 
-                    <button id="fetch-verify-btn" class="action-btn">📡 Fetch Live Position &amp; Check Route</button>
+                    <button id="fetch-verify-btn" class="action-btn" data-i18n="sidebar.fetchBtn">📡 Fetch Live Position &amp; Check Route</button>
                     <div id="wialon-fetch-status" style="font-size:.76rem; min-height:16px; margin-top:2px;"></div>
 
                     <details style="margin-top:6px;">
-                        <summary style="cursor:pointer; font-size:.78rem; color:var(--text-dim);">Paste coordinates manually instead</summary>
+                        <summary style="cursor:pointer; font-size:.78rem; color:var(--text-dim);" data-i18n="sidebar.pasteManually">Paste coordinates manually instead</summary>
                         <div class="form-group" style="margin-top:8px;">
                             <input type="text" id="wialon-coords" placeholder="e.g., 36.2341, 2.9845">
                             <button id="verify-btn" class="action-btn secondary small">Check with pasted coordinates</button>
@@ -1732,16 +1740,36 @@ svg.leaflet-image-layer.leaflet-interactive path {
         </div>
 
         <!-- ================= WIALON TEST VIEW ================= -->
-        <div id="view-wialon" class="view">
-            <div style="max-width:560px; margin:0 auto; padding-top:20px;">
+        <!-- ================= SETTINGS VIEW ================= -->
+        <div id="view-settings" class="view">
+            <div style="max-width:640px; margin:0 auto; padding-top:20px; padding-bottom:40px;">
                 <div id="fleet-header">
                     <div>
-                        <h2>Wialon Connection Test</h2>
-                        <p>Paste your token to confirm it authenticates and can see your fleet. Nothing here is saved to the file — you'll need to re-enter it each time you open the app, until we decide how the real integration should handle it.</p>
+                        <h2 data-i18n="settings.title">Settings</h2>
+                        <p data-i18n="settings.subtitle">Appearance, language, Wialon connection, and site/geofence data — everything you configure once and rarely touch.</p>
                     </div>
                 </div>
 
-                <div class="form-group" style="margin-top:10px;">
+                <div class="section-label" style="margin-bottom:10px;" data-i18n="settings.appearance">🎨 Appearance</div>
+                <div id="theme-toggle" style="margin-bottom:22px;">
+                    <button class="theme-btn active" data-theme="dark" title="Dark theme">🌙 Dark</button>
+                    <button class="theme-btn" data-theme="light" title="Light theme">☀️ Light</button>
+                    <button class="theme-btn" data-theme="black" title="Black theme">⚫ Black</button>
+                </div>
+
+                <div class="section-label" style="margin-bottom:10px;" data-i18n="settings.language">🌐 Language</div>
+                <div id="language-toggle" style="margin-bottom:10px;">
+                    <button class="lang-btn active" data-lang="en">English</button>
+                    <button class="lang-btn" data-lang="fr">Français</button>
+                    <button class="lang-btn" data-lang="ar">العربية</button>
+                </div>
+                <div id="language-note" style="font-size:.75rem; color:var(--text-dim); margin-bottom:22px;"></div>
+
+                <hr style="margin:22px 0;">
+
+                <div class="section-label" style="margin-bottom:10px;" data-i18n="settings.wialon">🔌 Wialon Connection</div>
+                <p style="font-size:.82rem; color:var(--text-dim); margin-bottom:12px;">Paste your token to confirm it authenticates and can see your fleet. Nothing here is saved to the file — you'll need to re-enter it each time you open the app.</p>
+                <div class="form-group">
                     <label for="wialon-relay">Relay URL <span style="color:var(--text-dim); font-weight:400;">(Cloudflare Worker — bypasses the CORS block)</span></label>
                     <input type="text" id="wialon-relay" value="https://wialon-relay1.ferdjellahsouhaibomd.workers.dev">
 
@@ -1751,24 +1779,15 @@ svg.leaflet-image-layer.leaflet-interactive path {
                     <label for="wialon-token">API token</label>
                     <input type="password" id="wialon-token" placeholder="Paste your Wialon token here">
 
-                    <button id="wialon-test-btn" class="action-btn" style="margin-top:10px;">Test Connection</button>
+                    <button id="wialon-test-btn" class="action-btn" style="margin-top:10px;" data-i18n="settings.testConnection">Test Connection</button>
                 </div>
-
                 <div id="wialon-test-result" style="margin-top:20px;"></div>
-            </div>
-        </div>
 
-        <!-- ================= GEOFENCES VIEW ================= -->
-        <div id="view-geofences" class="view">
-            <div style="max-width:640px; margin:0 auto; padding-top:20px;">
-                <div id="fleet-header">
-                    <div>
-                        <h2>Geofences</h2>
-                        <p>Add a new destination site directly, or bulk-import real zone shapes from Wialon KML exports.</p>
-                    </div>
-                </div>
+                <hr style="margin:22px 0;">
 
-                <div class="section-label" style="margin-bottom:10px;">➕ Add a new site</div>
+                <div class="section-label" style="margin-bottom:10px;" data-i18n="settings.sites">📍 Sites &amp; Geofences</div>
+
+                <div class="section-label" style="margin-bottom:10px; margin-top:14px;" data-i18n="settings.addSite">➕ Add a new site</div>
                 <div class="form-group">
                     <label for="manual-site-client">Client name</label>
                     <input type="text" id="manual-site-client" placeholder="e.g. EL BAYRAK EQUIPE 1 MATIN">
@@ -1779,13 +1798,13 @@ svg.leaflet-image-layer.leaflet-interactive path {
                     <label for="manual-site-coords">Coordinates</label>
                     <input type="text" id="manual-site-coords" placeholder="e.g. 36.6417633, 3.2927783">
 
-                    <button id="manual-site-save-btn" class="action-btn" style="margin-top:8px;">Save site</button>
+                    <button id="manual-site-save-btn" class="action-btn" style="margin-top:8px;" data-i18n="settings.saveSite">Save site</button>
                 </div>
                 <div id="manual-site-result" style="margin-top:10px;"></div>
 
                 <hr style="margin:22px 0;">
 
-                <div class="section-label" style="margin-bottom:10px;">📦 Bulk import from Wialon (KML)</div>
+                <div class="section-label" style="margin-bottom:10px;" data-i18n="settings.bulkImport">📦 Bulk import from Wialon (KML)</div>
                 <div class="form-group">
                     <label for="geofence-file-input">Upload KML file(s)</label>
                     <input type="file" id="geofence-file-input" accept=".kml" multiple>
@@ -1799,12 +1818,12 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
                 <hr style="margin:18px 0;">
 
-                <div class="section-label" style="margin-bottom:10px;">Manually added sites</div>
+                <div class="section-label" style="margin-bottom:10px;" data-i18n="settings.manualSites">Manually added sites</div>
                 <div id="manual-site-list"></div>
 
                 <hr style="margin:18px 0;">
 
-                <div class="section-label" style="margin-bottom:10px;">Loaded KML zones</div>
+                <div class="section-label" style="margin-bottom:10px;" data-i18n="settings.loadedZones">Loaded KML zones</div>
                 <div id="geofence-list"></div>
             </div>
         </div>
@@ -2495,6 +2514,7 @@ window.onload = function () {
         wireTopLevelControls();
         setupNotificationToggle();
         setupThemeToggle();
+        setupLanguageToggle();
         setupLiveFleetControls();
         setupGeofenceControls();
         setupDispatchQueueControls();
@@ -2696,8 +2716,7 @@ function switchView(viewName) {
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.view === viewName));
     document.getElementById('view-dispatch').classList.toggle('active', viewName === 'dispatch');
     document.getElementById('view-fleet').classList.toggle('active', viewName === 'fleet');
-    document.getElementById('view-wialon').classList.toggle('active', viewName === 'wialon');
-    document.getElementById('view-geofences').classList.toggle('active', viewName === 'geofences');
+    document.getElementById('view-settings').classList.toggle('active', viewName === 'settings');
     document.getElementById('view-queue').classList.toggle('active', viewName === 'queue');
     document.getElementById('view-history').classList.toggle('active', viewName === 'history');
     document.getElementById('view-dashboard').classList.toggle('active', viewName === 'dashboard');
@@ -2707,8 +2726,9 @@ function switchView(viewName) {
         setTimeout(() => { if (map) map.invalidateSize(); }, 50);
     } else if (viewName === 'fleet') {
         renderFleetTable();
-    } else if (viewName === 'geofences') {
+    } else if (viewName === 'settings') {
         renderGeofenceList();
+        renderManualSiteList();
     } else if (viewName === 'queue') {
         renderDispatchQueue();
     } else if (viewName === 'history') {
@@ -3362,7 +3382,7 @@ function updateNotificationToggleUI() {
     const statusEl = document.getElementById('notify-status');
     if (!btn) return;
     btn.classList.toggle('active', notificationsEnabled);
-    btn.textContent = notificationsEnabled ? '🔔 Arrival alerts ON' : '🔕 Arrival alerts OFF';
+    btn.textContent = notificationsEnabled ? t('sidebar.notifyOn') : t('sidebar.notifyOff');
     if (statusEl) {
         statusEl.textContent = notificationsEnabled
             ? `Checking active trucks every ${POLL_INTERVAL_MS / 60000} min while this tab stays open`
@@ -3415,7 +3435,7 @@ function updateLiveTrackingToggleUI() {
     const btn = document.getElementById('live-tracking-toggle-btn');
     if (!btn) return;
     btn.classList.toggle('active', liveTrackingEnabled);
-    btn.textContent = liveTrackingEnabled ? '📡 Live Fleet ON' : '📡 Live Fleet OFF';
+    btn.textContent = liveTrackingEnabled ? t('sidebar.liveFleetOn') : t('sidebar.liveFleetOff');
 }
 
 // Single shared polling loop — runs if EITHER live tracking or notifications
@@ -3743,7 +3763,7 @@ function toggleSoundAlerts() {
     const btn = document.getElementById('sound-toggle-btn');
     if (btn) {
         btn.classList.toggle('active', soundAlertsEnabled);
-        btn.textContent = soundAlertsEnabled ? '🔊 Sound ON' : '🔇 Sound OFF';
+        btn.textContent = soundAlertsEnabled ? t('sidebar.soundOn') : t('sidebar.soundOff');
     }
     if (soundAlertsEnabled) playAlertSound('arrival'); // quick confirmation beep so you know it's working
 }
@@ -4683,6 +4703,159 @@ function setupThemeToggle() {
 
 
 
+
+// ---------------------------------------------------------------
+// LANGUAGE — English / French / Arabic. Covers the primary navigation
+// and chrome thoroughly. Honest scope note: deep content (notification
+// message text, alert() dialogs, table row data) stays in English for
+// now — translating every dynamic string in the app is a much larger
+// job than the navigation/UI shell covered here.
+// ---------------------------------------------------------------
+let currentLanguage = 'en';
+
+const translations = {
+    en: {
+        'nav.dashboard': '🏠 Dashboard', 'nav.dispatch': '🗺️ Dispatch', 'nav.monitoring': '🔎 Monitoring',
+        'nav.queue': '📋 Queue', 'nav.fleet': '📊 Active Fleet', 'nav.history': '📜 History',
+        'nav.notifications': '🔔 Notifications', 'nav.settings': '⚙️ Settings',
+        'brand.title': 'Fleet Route Monitor', 'brand.subtitle': 'OMD Transport · Amouda Line',
+        'sidebar.liveFleetOff': '📡 Live Fleet OFF', 'sidebar.liveFleetOn': '📡 Live Fleet ON',
+        'sidebar.filterDispatched': 'Dispatched', 'sidebar.filterIdle': 'Idle', 'sidebar.filterOffline': 'Offline', 'sidebar.filterAll': 'All',
+        'sidebar.searchPlaceholder': 'Search driver or truck ID...',
+        'sidebar.step1': 'Select Truck(s)', 'sidebar.step2': 'Route', 'sidebar.step3': 'Verify Position',
+        'sidebar.truckSearchPlaceholder': 'Type truck ID to filter...',
+        'sidebar.startingFactory': 'Starting factory',
+        'sidebar.destination': 'Destination — client or site name',
+        'sidebar.destinationSearchPlaceholder': 'Type client name or town...',
+        'sidebar.startBtn': '▶ Start Tracking Run',
+        'sidebar.activeRun': 'Active run',
+        'sidebar.fetchBtn': '📡 Fetch Live Position & Check Route',
+        'sidebar.pasteManually': 'Paste coordinates manually instead',
+        'sidebar.checkPasted': 'Check with pasted coordinates',
+        'sidebar.notifyOff': '🔕 Arrival alerts OFF', 'sidebar.notifyOn': '🔔 Arrival alerts ON',
+        'sidebar.soundOff': '🔇 Sound OFF', 'sidebar.soundOn': '🔊 Sound ON',
+        'sidebar.activeFleet': 'Active monitored fleet',
+        'table.truck': 'Truck', 'table.client': 'Client', 'table.destination': 'Destination',
+        'table.driver': 'Driver', 'table.status': 'Status', 'table.eta': 'ETA', 'table.lastUpdate': 'Last update',
+        'table.dispatched': 'Dispatched', 'table.stopped': 'Stopped', 'table.duration': 'Duration', 'table.outcome': 'Outcome',
+        'btn.locate': 'Locate', 'btn.route': 'Route', 'btn.stop': 'Stop', 'btn.remove': 'Remove',
+        'settings.title': 'Settings', 'settings.subtitle': 'Appearance, language, Wialon connection, and site/geofence data — everything you configure once and rarely touch.',
+        'settings.appearance': '🎨 Appearance', 'settings.language': '🌐 Language',
+        'settings.wialon': '🔌 Wialon Connection', 'settings.sites': '📍 Sites & Geofences',
+        'settings.addSite': '➕ Add a new site', 'settings.bulkImport': '📦 Bulk import from Wialon (KML)',
+        'settings.manualSites': 'Manually added sites', 'settings.loadedZones': 'Loaded KML zones',
+        'settings.testConnection': 'Test Connection', 'settings.saveSite': 'Save site',
+    },
+    fr: {
+        'nav.dashboard': '🏠 Tableau de bord', 'nav.dispatch': '🗺️ Répartition', 'nav.monitoring': '🔎 Surveillance',
+        'nav.queue': '📋 File d\'attente', 'nav.fleet': '📊 Flotte active', 'nav.history': '📜 Historique',
+        'nav.notifications': '🔔 Notifications', 'nav.settings': '⚙️ Paramètres',
+        'brand.title': 'Suivi des itinéraires', 'brand.subtitle': 'OMD Transport · Ligne Amouda',
+        'sidebar.liveFleetOff': '📡 Suivi en direct DÉSACTIVÉ', 'sidebar.liveFleetOn': '📡 Suivi en direct ACTIVÉ',
+        'sidebar.filterDispatched': 'Envoyés', 'sidebar.filterIdle': 'Inactifs', 'sidebar.filterOffline': 'Hors ligne', 'sidebar.filterAll': 'Tous',
+        'sidebar.searchPlaceholder': 'Rechercher un chauffeur ou un camion...',
+        'sidebar.step1': 'Sélectionner le(s) camion(s)', 'sidebar.step2': 'Itinéraire', 'sidebar.step3': 'Vérifier la position',
+        'sidebar.truckSearchPlaceholder': 'Filtrer par ID de camion...',
+        'sidebar.startingFactory': 'Usine de départ',
+        'sidebar.destination': 'Destination — client ou site',
+        'sidebar.destinationSearchPlaceholder': 'Nom du client ou de la ville...',
+        'sidebar.startBtn': '▶ Démarrer le suivi',
+        'sidebar.activeRun': 'Trajet actif',
+        'sidebar.fetchBtn': '📡 Récupérer la position & vérifier l\'itinéraire',
+        'sidebar.pasteManually': 'Coller les coordonnées manuellement',
+        'sidebar.checkPasted': 'Vérifier avec les coordonnées collées',
+        'sidebar.notifyOff': '🔕 Alertes d\'arrivée DÉSACTIVÉES', 'sidebar.notifyOn': '🔔 Alertes d\'arrivée ACTIVÉES',
+        'sidebar.soundOff': '🔇 Son DÉSACTIVÉ', 'sidebar.soundOn': '🔊 Son ACTIVÉ',
+        'sidebar.activeFleet': 'Flotte surveillée active',
+        'table.truck': 'Camion', 'table.client': 'Client', 'table.destination': 'Destination',
+        'table.driver': 'Chauffeur', 'table.status': 'Statut', 'table.eta': 'ETA', 'table.lastUpdate': 'Dernière mise à jour',
+        'table.dispatched': 'Envoyé', 'table.stopped': 'Arrêté', 'table.duration': 'Durée', 'table.outcome': 'Résultat',
+        'btn.locate': 'Localiser', 'btn.route': 'Itinéraire', 'btn.stop': 'Arrêter', 'btn.remove': 'Retirer',
+        'settings.title': 'Paramètres', 'settings.subtitle': 'Apparence, langue, connexion Wialon et données des sites/géorepérages — tout ce que vous configurez une fois pour toutes.',
+        'settings.appearance': '🎨 Apparence', 'settings.language': '🌐 Langue',
+        'settings.wialon': '🔌 Connexion Wialon', 'settings.sites': '📍 Sites et géorepérages',
+        'settings.addSite': '➕ Ajouter un nouveau site', 'settings.bulkImport': '📦 Import groupé depuis Wialon (KML)',
+        'settings.manualSites': 'Sites ajoutés manuellement', 'settings.loadedZones': 'Zones KML chargées',
+        'settings.testConnection': 'Tester la connexion', 'settings.saveSite': 'Enregistrer le site',
+    },
+    ar: {
+        'nav.dashboard': '🏠 لوحة التحكم', 'nav.dispatch': '🗺️ الإرسال', 'nav.monitoring': '🔎 المراقبة',
+        'nav.queue': '📋 قائمة الانتظار', 'nav.fleet': '📊 الأسطول النشط', 'nav.history': '📜 السجل',
+        'nav.notifications': '🔔 الإشعارات', 'nav.settings': '⚙️ الإعدادات',
+        'brand.title': 'مراقبة مسارات الأسطول', 'brand.subtitle': 'OMD للنقل · خط أموداء',
+        'sidebar.liveFleetOff': '📡 التتبع المباشر متوقف', 'sidebar.liveFleetOn': '📡 التتبع المباشر مفعّل',
+        'sidebar.filterDispatched': 'تم الإرسال', 'sidebar.filterIdle': 'متوقف مؤقتاً', 'sidebar.filterOffline': 'غير متصل', 'sidebar.filterAll': 'الكل',
+        'sidebar.searchPlaceholder': 'ابحث عن سائق أو رقم شاحنة...',
+        'sidebar.step1': 'اختر الشاحنة (الشاحنات)', 'sidebar.step2': 'المسار', 'sidebar.step3': 'تحقق من الموقع',
+        'sidebar.truckSearchPlaceholder': 'اكتب رقم الشاحنة للتصفية...',
+        'sidebar.startingFactory': 'المصنع المنطلق',
+        'sidebar.destination': 'الوجهة — العميل أو الموقع',
+        'sidebar.destinationSearchPlaceholder': 'اسم العميل أو المدينة...',
+        'sidebar.startBtn': '▶ بدء التتبع',
+        'sidebar.activeRun': 'الرحلة النشطة',
+        'sidebar.fetchBtn': '📡 جلب الموقع الحالي والتحقق من المسار',
+        'sidebar.pasteManually': 'إدخال الإحداثيات يدوياً بدلاً من ذلك',
+        'sidebar.checkPasted': 'تحقق بالإحداثيات المُدخلة',
+        'sidebar.notifyOff': '🔕 تنبيهات الوصول متوقفة', 'sidebar.notifyOn': '🔔 تنبيهات الوصول مفعّلة',
+        'sidebar.soundOff': '🔇 الصوت متوقف', 'sidebar.soundOn': '🔊 الصوت مفعّل',
+        'sidebar.activeFleet': 'الأسطول المراقَب النشط',
+        'table.truck': 'الشاحنة', 'table.client': 'العميل', 'table.destination': 'الوجهة',
+        'table.driver': 'السائق', 'table.status': 'الحالة', 'table.eta': 'الوقت المتوقع للوصول', 'table.lastUpdate': 'آخر تحديث',
+        'table.dispatched': 'تم الإرسال', 'table.stopped': 'تم الإيقاف', 'table.duration': 'المدة', 'table.outcome': 'النتيجة',
+        'btn.locate': 'تحديد الموقع', 'btn.route': 'المسار', 'btn.stop': 'إيقاف', 'btn.remove': 'إزالة',
+        'settings.title': 'الإعدادات', 'settings.subtitle': 'المظهر واللغة واتصال Wialon وبيانات المواقع/الجيوفنس — كل ما تقوم بإعداده مرة واحدة ونادراً ما تعدّله.',
+        'settings.appearance': '🎨 المظهر', 'settings.language': '🌐 اللغة',
+        'settings.wialon': '🔌 اتصال Wialon', 'settings.sites': '📍 المواقع والجيوفنس',
+        'settings.addSite': '➕ إضافة موقع جديد', 'settings.bulkImport': '📦 استيراد جماعي من Wialon (KML)',
+        'settings.manualSites': 'المواقع المضافة يدوياً', 'settings.loadedZones': 'مناطق KML المحمّلة',
+        'settings.testConnection': 'اختبار الاتصال', 'settings.saveSite': 'حفظ الموقع',
+    }
+};
+
+function t(key) {
+    return (translations[currentLanguage] && translations[currentLanguage][key]) || translations.en[key] || key;
+}
+
+function setLanguage(lang) {
+    currentLanguage = lang;
+    document.documentElement.setAttribute('lang', lang);
+    document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
+    });
+    applyTranslations();
+    updateLiveTrackingToggleUI();
+    updateNotificationToggleUI();
+    const soundBtn = document.getElementById('sound-toggle-btn');
+    if (soundBtn) soundBtn.textContent = soundAlertsEnabled ? t('sidebar.soundOn') : t('sidebar.soundOff');
+
+    const noteEl = document.getElementById('language-note');
+    if (noteEl) {
+        noteEl.textContent = lang === 'en'
+            ? ''
+            : lang === 'fr'
+                ? 'La navigation principale est traduite. Certains messages détaillés restent en anglais.'
+                : 'تمت ترجمة التنقل الرئيسي. تبقى بعض الرسائل التفصيلية باللغة الإنجليزية.';
+    }
+}
+
+function applyTranslations() {
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        const translated = t(key);
+        if (el.tagName === 'INPUT' && el.hasAttribute('placeholder')) {
+            el.setAttribute('placeholder', translated);
+        } else {
+            el.textContent = translated;
+        }
+    });
+}
+
+function setupLanguageToggle() {
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
+    });
+}
 
 </script>
 </body>
