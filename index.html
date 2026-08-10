@@ -1387,6 +1387,14 @@ svg.leaflet-image-layer.leaflet-interactive path {
             background:var(--panel-2); border:1px solid var(--line); border-radius:12px; padding:16px;
         }
         .dash-panel h3{ font-size:.85rem; font-weight:600; margin-bottom:10px; color:var(--text); }
+        .dash-chart-container {
+            position: relative;
+            height: 220px;
+            width: 100%;
+        }
+        .dash-chart-container canvas {
+            max-height: 220px !important;
+        }
         .dash-notif-row{
             display:flex; align-items:center; gap:8px; padding:7px 0; border-bottom:1px solid var(--line);
         }
@@ -1473,22 +1481,30 @@ svg.leaflet-image-layer.leaflet-interactive path {
             <div class="dash-two-col" style="margin-top:16px;">
                 <div class="dash-panel">
                     <h3>Fleet Status Distribution</h3>
-                    <canvas id="fleet-status-chart" height="200"></canvas>
+                    <div class="dash-chart-container">
+                        <canvas id="fleet-status-chart"></canvas>
+                    </div>
                 </div>
                 <div class="dash-panel">
                     <h3>Geofence Occupancy</h3>
-                    <canvas id="geofence-chart" height="200"></canvas>
+                    <div class="dash-chart-container">
+                        <canvas id="geofence-chart"></canvas>
+                    </div>
                 </div>
             </div>
 
             <div class="dash-two-col" style="margin-top:16px;">
                 <div class="dash-panel">
                     <h3>Fuel Stop Analysis</h3>
-                    <canvas id="fuel-stop-chart" height="200"></canvas>
+                    <div class="dash-chart-container">
+                        <canvas id="fuel-stop-chart"></canvas>
+                    </div>
                 </div>
                 <div class="dash-panel">
                     <h3>Alert Types Distribution</h3>
-                    <canvas id="alert-types-chart" height="200"></canvas>
+                    <div class="dash-chart-container">
+                        <canvas id="alert-types-chart"></canvas>
+                    </div>
                 </div>
             </div>
 
@@ -4798,7 +4814,8 @@ function updateDashboardCharts(moving, idle, offline) {
                     maintainAspectRatio: false,
                     plugins: {
                         legend: { position: 'bottom', labels: { color: '#ccc', font: { size: 11 } } }
-                    }
+                    },
+                    layout: { padding: 0 }
                 }
             });
         }
@@ -4833,7 +4850,8 @@ function updateDashboardCharts(moving, idle, offline) {
                     maintainAspectRatio: false,
                     plugins: {
                         legend: { position: 'bottom', labels: { color: '#ccc', font: { size: 11 } } }
-                    }
+                    },
+                    layout: { padding: 0 }
                 }
             });
         }
@@ -4868,7 +4886,8 @@ function updateDashboardCharts(moving, idle, offline) {
                     maintainAspectRatio: false,
                     plugins: {
                         legend: { position: 'bottom', labels: { color: '#ccc', font: { size: 10 } } }
-                    }
+                    },
+                    layout: { padding: 0 }
                 }
             });
         }
@@ -4904,7 +4923,8 @@ function updateDashboardCharts(moving, idle, offline) {
                     maintainAspectRatio: false,
                     plugins: {
                         legend: { position: 'bottom', labels: { color: '#ccc', font: { size: 10 } } }
-                    }
+                    },
+                    layout: { padding: 0 }
                 }
             });
         }
