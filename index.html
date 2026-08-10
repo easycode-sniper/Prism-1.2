@@ -4877,7 +4877,7 @@ function updateDashboardCharts(moving, idle, offline) {
     // Alert Types Distribution Chart (sample data)
     const alertCtx = document.getElementById('alert-types-chart');
     if (alertCtx) {
-        const speeding = Math.floor(values.filter(d => d.speed > 90).length);
+        const speeding = Math.floor(fleetTrucks.length * 0.1);
         const geofenceExit = Math.floor(Object.keys(activeRuns).length * 0.2);
         const geofenceEntry = Math.floor(Object.keys(activeRuns).length * 0.3);
         const idleTooLong = Math.floor(idle * 0.3);
