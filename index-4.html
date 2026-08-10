@@ -2574,8 +2574,18 @@ function initMap() {
         attribution: '&copy; Esri, Maxar, Earthstar Geographics',
         maxZoom: 19
     });
+    
+    tileLayers.satelliteLabels = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
+        attribution: '&copy; Esri, Garmin, GEBCO, NOAA, NGA',
+        maxZoom: 19
+    });
 
     tileLayers[currentBaseLayerName].addTo(map);
+    
+    // Add satellite labels if starting with satellite mode
+    if (currentBaseLayerName === 'satellite') {
+        tileLayers.satelliteLabels.addTo(map);
+    }
 
     // Clustering keeps the map readable at low zoom with 84 trucks + 125+
     // site markers all potentially on screen at once — nearby markers
@@ -2640,7 +2650,15 @@ function setupLayerToggle() {
 function switchBaseLayer(name) {
     if (name === currentBaseLayerName || !tileLayers[name]) return;
     map.removeLayer(tileLayers[currentBaseLayerName]);
+    // Remove satellite labels if they were added
+    if (currentBaseLayerName === 'satellite' && tileLayers.satelliteLabels) {
+        map.removeLayer(tileLayers.satelliteLabels);
+    }
     tileLayers[name].addTo(map);
+    // Add satellite labels when switching to satellite mode
+    if (name === 'satellite' && tileLayers.satelliteLabels) {
+        tileLayers.satelliteLabels.addTo(map);
+    }
     currentBaseLayerName = name;
     updateLayerToggleUI();
 }
