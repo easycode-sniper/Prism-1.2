@@ -2183,10 +2183,26 @@ let geofences = [
             [34.437511332, 2.078475423]
         ],
         layer: null
+    },
+    {
+        id: 'parc-omd',
+        name: "PARC OMD - Headquarters & Parking",
+        kind: 'site',
+        center: [36.6416533, 3.2922333],
+        radius: 150, // meters
+        polygon: null, // Will be generated as circle
+        layer: null
     }
 ];
 
 function isNearGeofence(point, geofence) {
+    // Handle circle-based geofences (like PARC OMD)
+    if (geofence.center && geofence.radius) {
+        const dist = haversineMeters(point[0], point[1], geofence.center[0], geofence.center[1]);
+        return dist <= geofence.radius + 50; // Add small buffer for arrival detection
+    }
+    
+    // Handle polygon-based geofences
     if (pointInPolygon(point, geofence.polygon)) return true;
     return distanceToPolygonBoundaryMeters(point, geofence.polygon) <= FACTORY_ZONE_EDGE_BUFFER_METERS;
 }
@@ -2246,10 +2262,24 @@ function addGeofence(name, polygon, kind = 'site', siteId = null) {
 }
 
 function drawGeofenceLayer(entry) {
-    const color = entry.kind === 'factory' ? '#6d5bff' : '#ffb703';
-    entry.layer = L.polygon(entry.polygon, {
-        color, weight: 2, fillColor: color, fillOpacity: 0.10
-    }).bindPopup(`<b>${entry.kind === 'factory' ? '🏭' : '📍'} ${entry.name}</b>`);
+    const color = entry.kind === 'factory' ? '#6d5bff' : (entry.id === 'parc-omd' ? '#00c853' : '#ffb703');
+    
+    if (entry.id === 'parc-omd' && entry.center && entry.radius) {
+        // Draw PARC OMD as a circle
+        entry.layer = L.circle(entry.center, {
+            radius: entry.radius,
+            color: color,
+            weight: 2,
+            fillColor: color,
+            fillOpacity: 0.15
+        }).bindPopup(`<b>🏢 ${entry.name}</b><br>Headquarters & Truck Parking`);
+    } else {
+        // Draw polygon-based geofences
+        entry.layer = L.polygon(entry.polygon, {
+            color, weight: 2, fillColor: color, fillOpacity: 0.10
+        }).bindPopup(`<b>${entry.kind === 'factory' ? '🏭' : '📍'} ${entry.name}</b>`);
+    }
+    
     if (geofencesLayerVisible) entry.layer.addTo(map);
 }
 
@@ -4183,13 +4213,20 @@ function renderGeofenceList() {
         listEl.innerHTML = `<div style="padding:14px; color:var(--text-dim); font-size:.85rem;">No geofences loaded yet.</div>`;
         return;
     }
-    listEl.innerHTML = geofences.map(g => `
+    listEl.innerHTML = geofences.map(g => {
+        // Handle circle-based geofences (like PARC OMD)
+        const pointCount = g.polygon ? g.polygon.length : (g.center ? 'circle' : 0);
+        const displayCount = pointCount === 'circle' ? '⊙ 150m radius' : `${pointCount} pts`;
+        const icon = g.id === 'parc-omd' ? '🏢' : (g.kind === 'factory' ? '🏭' : '📍');
+        
+        return `
         <div class="geofence-row">
-            <span>${g.kind === 'factory' ? '🏭' : '📍'} ${g.name}</span>
-            <span style="color:var(--text-dim); font-size:.75rem;">${g.polygon.length} pts</span>
-            ${g.kind !== 'factory' ? `<button class="geofence-remove-btn" data-id="${g.id}">✕</button>` : ''}
+            <span>${icon} ${g.name}</span>
+            <span style="color:var(--text-dim); font-size:.75rem;">${displayCount}</span>
+            ${g.kind !== 'factory' && g.id !== 'parc-omd' ? `<button class="geofence-remove-btn" data-id="${g.id}">✕</button>` : ''}
         </div>
-    `).join('');
+    `;
+    }).join('');
     listEl.querySelectorAll('.geofence-remove-btn').forEach(btn => {
         btn.addEventListener('click', () => removeGeofence(btn.dataset.id));
     });
