@@ -1606,6 +1606,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
                     <span style="width:1px; background:var(--line); margin:2px 2px;"></span>
                     <button id="layer-btn-geofences" class="layer-btn active" title="Show/hide geofence zones">📍 Zones</button>
                     <button id="layer-btn-names" class="layer-btn active" title="Show/hide driver name labels">🏷️ Names</button>
+                    <button id="layer-btn-gasstations" class="layer-btn" title="Show/hide gas stations">⛽ Gas</button>
                 </div>
             </main>
         </div>
@@ -2195,6 +2196,52 @@ let geofences = [
     }
 ];
 
+// Gas stations data - small radius geofences for gas stations
+const gasStationsData = [
+    { name: "PVA MAHAMMEDI AHMED", coords: [34.817597, 2.913927] },
+    { name: "BOUZAR ABDELKADER", coords: [34.465176, 1.833560] },
+    { name: "PVA BENFLIS IMAD", coords: [35.519278, 6.071944] },
+    { name: "CHERIKI KADDOUR", coords: [34.474111, 2.164083] },
+    { name: "PVA SARL ALBAG", coords: [36.6460716, 3.2970683] },
+    { name: "PVA KALLI ABDELOUAHED", coords: [35.8580433, 7.1092416] },
+    { name: "GD SIDI EL KEBIR SUD", coords: [36.6421633, 3.1849816] },
+    { name: "GD AURES", coords: [35.206388604306625, 5.688120934834597] },
+    { name: "PVA BENHACHILIF MOHAMED", coords: [34.05618, 1.2502266] },
+    { name: "ASSALI YOUCEF", coords: [32.9188949, 3.7075116] },
+    { name: "PVA SARL LA PORTE DES AURESS", coords: [34.0559733, 1.2499216] },
+    { name: "GD BECHLOUL SUD", coords: [36.3094716, 4.062385] },
+    { name: "SNC BENHAMED ET FILS", coords: [33.9213633, 2.6297316] },
+    { name: "GD BECHLOUL NORD", coords: [36.3115083, 4.064975] },
+    { name: "GD SIDI ZITOUNI NORD", coords: [36.06388, 4.8387666] },
+    { name: "GD H. GROUZ NORD", coords: [36.1860383, 6.251525] },
+    { name: "GD SIDI EL KEBIR NORD", coords: [36.6421633, 3.1849816] },
+    { name: "GD AIN DEHEB", coords: [34.855600008379696, 1.5425632709561734] },
+    { name: "GD BATNA 21", coords: [35.5815183, 6.1949183] },
+    { name: "EURL SYKAN TPH", coords: [33.4236533, 0.7336183] },
+    { name: "KHERROUBI SALAH", coords: [32.066537253768075, 5.58093308664512] },
+    { name: "GD MILEV SUD", coords: [36.1811083, 6.2514716] },
+    { name: "SARL S/S ARAMI FONTAINE DES GAZELLES EL OUTAYA", coords: [35.1232883, 5.6125516] },
+    { name: "SARL THAZIRI SERVICES", coords: [35.366941567190864, 5.875231561544741] },
+    { name: "BELLI MOHAMED SALAH", coords: [32.827008423721274, 3.7632753923833957] },
+    { name: "KHAMOUYENE MOHAMED", coords: [30.60883390856152, 2.9062007971996353] },
+    { name: "S/S GD R2130 AUTOROUTIERE RUSSICADA NORD", coords: [36.72751177583872, 7.227503397323203] },
+    { name: "BELDJILLALI BELKACEM", coords: [34.85175762155201, 1.0201831871944906] },
+    { name: "GD SIDI ZITOUNI SUD", coords: [34.85201412108328, 1.0254967646205582] },
+    { name: "SARL SOURCE EL GHOZLANE", coords: [34.888348128903885, 5.706485071594549] },
+    { name: "GL ZIDANE BOUALEM", coords: [36.54832477112223, 3.6628981735021764] },
+    { name: "GD HASSI KHEBI", coords: [29.185035, -5.0820466] },
+    { name: "PVA PERLE DE SUD", coords: [32.06916050817911, -1.2476817353543914] },
+    { name: "GD EL MEDFOUNE", coords: [35.8564816, 7.1921333] },
+    { name: "EURL STATION MULTI SERVICE SONNE", coords: [33.75291460383933, 2.8920681882290205] },
+    { name: "GD OUM LASSEL", coords: [28.624834001005063, -6.982184883008185] },
+    { name: "S/S RUSSICADA SUD", coords: [36.72751177583872, 7.227503397323203] },
+    { name: "PVA HAMIDI HOUSSAM", coords: [35.08142997281174, 3.023200438171726] },
+    { name: "GD AIN ARNAT NORD", coords: [36.154081705264105, 5.266276596477981] },
+    { name: "PVA HMS HIDDIBI", coords: [31.00627448247023, -2.741900857081081] },
+    { name: "PVA DERRADJI LAKHDAR", coords: [35.768388996632765, 0.638200679648403] },
+    { name: "GD AIN ARNET SUD", coords: [36.154081705264105, 5.266276596477981] }
+];
+
 function isNearGeofence(point, geofence) {
     // Handle circle-based geofences (like PARC OMD)
     if (geofence.center && geofence.radius) {
@@ -2531,6 +2578,8 @@ let tileLayers = {};
 let currentBaseLayerName = 'dark';
 let geofencesLayerVisible = true;
 let driverNamesVisible = true;
+let gasStationsVisible = false;
+let gasStationsLayer = null;
 
 window.onload = function () {
     // UI wiring happens first and unconditionally — if the map/tile library
@@ -2673,6 +2722,47 @@ function setupLayerToggle() {
             driverNamesVisible = !driverNamesVisible;
             document.getElementById('map-viewport').classList.toggle('hide-driver-names', !driverNamesVisible);
             namesBtn.classList.toggle('active', driverNamesVisible);
+        });
+    }
+    
+    const gasStationsBtn = document.getElementById('layer-btn-gasstations');
+    if (gasStationsBtn) {
+        gasStationsBtn.addEventListener('click', () => {
+            gasStationsVisible = !gasStationsVisible;
+            if (gasStationsVisible) {
+                if (!gasStationsLayer) {
+                    gasStationsLayer = L.layerGroup();
+                    const GAS_STATION_RADIUS = 30; // Small radius for gas stations
+                    
+                    gasStationsData.forEach(station => {
+                        const circle = L.circle(station.coords, {
+                            radius: GAS_STATION_RADIUS,
+                            color: '#ff6b35',
+                            weight: 1,
+                            fillColor: '#ff6b35',
+                            fillOpacity: 0.4
+                        }).bindPopup(`<b>⛽ ${station.name}</b>`);
+                        
+                        const marker = L.marker(station.coords, {
+                            icon: L.divIcon({
+                                className: 'gas-station-marker',
+                                html: '<div style="background:#ff6b35;color:white;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:bold;">⛽</div>',
+                                iconSize: [24, 24],
+                                iconAnchor: [12, 12]
+                            })
+                        }).bindPopup(`<b>⛽ ${station.name}</b>`);
+                        
+                        const group = L.layerGroup([circle, marker]);
+                        gasStationsLayer.addLayer(group);
+                    });
+                }
+                map.addLayer(gasStationsLayer);
+            } else {
+                if (gasStationsLayer) {
+                    map.removeLayer(gasStationsLayer);
+                }
+            }
+            gasStationsBtn.classList.toggle('active', gasStationsVisible);
         });
     }
 }
