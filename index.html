@@ -1102,6 +1102,20 @@ svg.leaflet-image-layer.leaflet-interactive path {
         .theme-btn:not(.active):hover, .lang-btn:not(.active):hover{ background:var(--panel-3); color:var(--text); }
         #topbar-stats strong{ color:var(--amber); }
 
+        /* ---------- Operational status strip ---------- */
+        #operations-strip{
+            display:flex; align-items:center; gap:18px; min-height:36px; padding:7px 20px;
+            background:var(--panel-2); border-bottom:1px solid var(--line); color:var(--text-dim);
+            font-family:'IBM Plex Mono', monospace; font-size:.72rem;
+        }
+        .ops-item{ display:flex; align-items:center; gap:7px; white-space:nowrap; }
+        .ops-dot{ width:8px; height:8px; border-radius:50%; background:#657077; box-shadow:0 0 0 3px rgba(101,112,119,.12); }
+        .ops-dot.live{ background:#159c83; box-shadow:0 0 0 3px rgba(21,156,131,.14), 0 0 10px rgba(21,156,131,.5); animation:ops-pulse 1.8s infinite; }
+        .ops-item strong{ color:var(--text); font-size:.78rem; }
+        .ops-item.alert strong{ color:#d92d42; }
+        .ops-divider{ width:1px; height:16px; background:var(--line); }
+        @keyframes ops-pulse{ 50%{ opacity:.55; transform:scale(.85); } }
+
         /* ---------- Views ---------- */
         #view-container{ flex:1; position:relative; overflow:hidden; min-height:0; }
         .view{ display:none; height:100%; width:100%; min-height:0; }
@@ -1139,6 +1153,14 @@ svg.leaflet-image-layer.leaflet-interactive path {
             width:18px; height:18px; border-radius:5px; background:var(--panel-2); border:1px solid var(--line);
             display:flex; align-items:center; justify-content:center; color:var(--indigo); font-size:.68rem;
         }
+        .workflow-step{ position:relative; padding:12px 0 0 16px; border-left:1px solid var(--line); }
+        .workflow-step + .workflow-step{ margin-top:2px; }
+        .workflow-step .section-label{ margin-left:-26px; }
+        .workflow-step .section-label .num{ background:var(--panel); transition:.2s; }
+        .workflow-step.is-ready{ border-left-color:rgba(21,156,131,.7); }
+        .workflow-step.is-ready .section-label .num{ color:#159c83; border-color:#159c83; box-shadow:0 0 0 3px rgba(21,156,131,.12); }
+        .workflow-summary{ min-height:24px; padding:6px 8px; border-radius:6px; background:rgba(21,156,131,.08); border:1px solid rgba(21,156,131,.18); color:var(--text-dim); font-size:.73rem; }
+        .workflow-summary strong{ color:#159c83; font-family:'IBM Plex Mono', monospace; }
 
         .form-group{ display:flex; flex-direction:column; gap:8px; }
         label{ font-size:.8rem; color:var(--text-dim); font-weight:500; margin-top:2px; }
@@ -1306,18 +1328,18 @@ svg.leaflet-image-layer.leaflet-interactive path {
         .site-glow-marker.approx{ opacity:0.65; box-shadow:0 0 6px var(--amber); }
         .site-glow-marker.suspect{ background:var(--red); box-shadow:0 0 10px var(--red), 0 0 18px rgba(248,113,113,0.6); }
 
-        .truck-pos-marker{ background:var(--cyan); border:2px solid #fff; border-radius:50%; box-shadow:0 0 10px var(--cyan), 0 0 20px rgba(34,211,238,0.6); animation:pulse 1.8s infinite ease-in-out; }
-        .truck-pos-marker.off-route{ background:var(--red); box-shadow:0 0 10px var(--red), 0 0 20px rgba(248,113,113,0.6); animation:pulse-red 1.2s infinite ease-in-out; }
-        .truck-pos-marker.unknown-route{ background:var(--amber); box-shadow:0 0 10px var(--amber), 0 0 20px rgba(255,183,3,0.6); }
+        .truck-pos-marker{ background:#159c83; border:2px solid #fff; border-radius:50%; box-shadow:0 0 10px #159c83, 0 0 20px rgba(21,156,131,.6); animation:pulse 1.8s infinite ease-in-out; }
+        .truck-pos-marker.off-route{ background:#d92d42; box-shadow:0 0 10px #d92d42, 0 0 20px rgba(217,45,66,.6); animation:pulse-red 1.2s infinite ease-in-out; }
+        .truck-pos-marker.unknown-route{ background:#e6a51b; box-shadow:0 0 10px #e6a51b, 0 0 20px rgba(230,165,27,.6); }
         @keyframes pulse{
-            0%{ box-shadow:0 0 8px var(--cyan), 0 0 14px rgba(34,211,238,.5); }
-            50%{ box-shadow:0 0 14px var(--cyan), 0 0 26px rgba(34,211,238,.7); }
-            100%{ box-shadow:0 0 8px var(--cyan), 0 0 14px rgba(34,211,238,.5); }
+            0%{ box-shadow:0 0 8px #159c83, 0 0 14px rgba(21,156,131,.5); }
+            50%{ box-shadow:0 0 14px #159c83, 0 0 26px rgba(21,156,131,.7); }
+            100%{ box-shadow:0 0 8px #159c83, 0 0 14px rgba(21,156,131,.5); }
         }
         @keyframes pulse-red{
-            0%{ box-shadow:0 0 8px var(--red), 0 0 14px rgba(248,113,113,.5); }
-            50%{ box-shadow:0 0 16px var(--red), 0 0 30px rgba(248,113,113,.8); }
-            100%{ box-shadow:0 0 8px var(--red), 0 0 14px rgba(248,113,113,.5); }
+            0%{ box-shadow:0 0 8px #d92d42, 0 0 14px rgba(217,45,66,.5); }
+            50%{ box-shadow:0 0 16px #d92d42, 0 0 30px rgba(217,45,66,.8); }
+            100%{ box-shadow:0 0 8px #d92d42, 0 0 14px rgba(217,45,66,.5); }
         }
 
         .leaflet-popup-content-wrapper{ background:var(--panel); color:var(--text); border:1px solid var(--line); border-radius:8px; }
@@ -1459,6 +1481,15 @@ svg.leaflet-image-layer.leaflet-interactive path {
         </div>
     </div>
 
+    <div id="operations-strip" aria-label="Operational status">
+        <div class="ops-item"><span class="ops-dot" id="ops-live-dot"></span><span id="ops-live-label">Live tracking paused</span></div>
+        <span class="ops-divider"></span>
+        <div class="ops-item">Active runs <strong id="ops-active-count">0</strong></div>
+        <div class="ops-item alert">Off route <strong id="ops-offroute-count">0</strong></div>
+        <span class="ops-divider"></span>
+        <div class="ops-item">Last update <strong id="ops-last-update">Not yet synced</strong></div>
+    </div>
+
     <div id="view-container">
 
         <!-- ================= DASHBOARD VIEW ================= -->
@@ -1582,31 +1613,38 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
                 <hr>
 
-                <div class="section-label"><span class="num">1</span> <span data-i18n="sidebar.step1">Select Truck(s)</span></div>
-                <div class="form-group">
-                    <input type="text" id="truck-search" class="search-input" data-i18n="sidebar.truckSearchPlaceholder" placeholder="Type truck ID to filter...">
-                    <div id="truck-list"></div>
-                    <div class="convoy-chips" id="convoy-chips"></div>
-                </div>
+                <section class="workflow-step" id="workflow-step-trucks">
+                    <div class="section-label"><span class="num">1</span> <span data-i18n="sidebar.step1">Select Truck(s)</span></div>
+                    <div class="form-group">
+                        <input type="text" id="truck-search" class="search-input" data-i18n="sidebar.truckSearchPlaceholder" placeholder="Type truck ID to filter...">
+                        <div id="truck-list"></div>
+                        <div class="convoy-chips" id="convoy-chips"></div>
+                        <div class="workflow-summary" id="truck-selection-summary">Select one or more trucks to build a convoy.</div>
+                    </div>
+                </section>
 
-                <div class="section-label"><span class="num">2</span> <span data-i18n="sidebar.step2">Route</span></div>
-                <div class="form-group">
-                    <label for="factory-select" data-i18n="sidebar.startingFactory">Starting factory</label>
-                    <select id="factory-select">
-                        <option value="amouda">Usine Amouda Ciment (El Baida)</option>
-                    </select>
+                <section class="workflow-step" id="workflow-step-route">
+                    <div class="section-label"><span class="num">2</span> <span data-i18n="sidebar.step2">Route</span></div>
+                    <div class="form-group">
+                        <label for="factory-select" data-i18n="sidebar.startingFactory">Starting factory</label>
+                        <select id="factory-select">
+                            <option value="amouda">Usine Amouda Ciment (El Baida)</option>
+                        </select>
 
-                    <label for="site-search" data-i18n="sidebar.destination">Destination — client or site name</label>
-                    <input type="text" id="site-search" class="search-input" data-i18n="sidebar.destinationSearchPlaceholder" placeholder="Type client name or town...">
-                    <select id="site-select" size="6">
-                        <option value="">-- Select Destination Site --</option>
-                    </select>
+                        <label for="site-search" data-i18n="sidebar.destination">Destination — client or site name</label>
+                        <input type="text" id="site-search" class="search-input" data-i18n="sidebar.destinationSearchPlaceholder" placeholder="Type client name or town...">
+                        <select id="site-select" size="6">
+                            <option value="">-- Select Destination Site --</option>
+                        </select>
+                        <div class="workflow-summary" id="route-selection-summary">Choose a destination to prepare the route.</div>
 
-                    <button id="start-btn" class="action-btn" data-i18n="sidebar.startBtn">&#9654; Start Tracking Run</button>
-                </div>
+                        <button id="start-btn" class="action-btn" data-i18n="sidebar.startBtn">&#9654; Start Tracking Run</button>
+                    </div>
+                </section>
 
                 <hr>
 
+                <section class="workflow-step" id="workflow-step-verify">
                 <div class="section-label"><span class="num">3</span> <span data-i18n="sidebar.step3">Verify Position</span></div>
                 <div class="form-group">
                     <label for="active-trucks" data-i18n="sidebar.activeRun">Active run</label>
@@ -1625,6 +1663,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
                         </div>
                     </details>
                 </div>
+                </section>
 
                 <button id="notify-toggle-btn" class="action-btn secondary" style="margin-top:2px;">🔕 Arrival alerts OFF</button>
                 <button id="sound-toggle-btn" class="action-btn secondary" style="margin-top:6px;">🔇 Sound OFF</button>
@@ -1635,7 +1674,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
                         <span>Active monitored fleet</span>
                         <span><strong id="active-count">0</strong> / <span id="fleet-total">&mdash;</span></span>
                     </div>
-                    <div class="stat-sub">Amber = sites &middot; red site = suspect coords &middot; cyan/red truck = on/off route &middot; purple outline = real factory zone (Wialon)</div>
+                    <div class="stat-sub">Green = on route &middot; OMD red = off route &middot; amber = route pending &middot; purple outline = real factory zone (Wialon)</div>
                 </div>
             </aside>
 
@@ -2887,7 +2926,9 @@ function wireTopLevelControls() {
     document.getElementById('truck-search').addEventListener('input', e => renderTruckList(e.target.value));
     document.getElementById('site-search').addEventListener('input', e => {
         filterSelect(masterSiteOptions, document.getElementById('site-select'), e.target.value);
+        updateWorkflowSummary();
     });
+    document.getElementById('site-select').addEventListener('change', updateWorkflowSummary);
 }
 
 function switchView(viewName) {
@@ -2949,6 +2990,7 @@ function toggleTruck(truck) {
     }
     renderTruckList(document.getElementById('truck-search').value);
     renderConvoyChips();
+    updateWorkflowSummary();
 }
 
 function renderConvoyChips() {
@@ -2964,6 +3006,32 @@ function renderConvoyChips() {
         chip.appendChild(removeBtn);
         wrap.appendChild(chip);
     });
+}
+
+function updateWorkflowSummary() {
+    const truckSummary = document.getElementById('truck-selection-summary');
+    const routeSummary = document.getElementById('route-selection-summary');
+    const truckStep = document.getElementById('workflow-step-trucks');
+    const routeStep = document.getElementById('workflow-step-route');
+    const verifyStep = document.getElementById('workflow-step-verify');
+    const siteSelect = document.getElementById('site-select');
+    const selectedOption = siteSelect && siteSelect.options[siteSelect.selectedIndex];
+    const hasTrucks = selectedTrucks.size > 0;
+    const hasRoute = !!(siteSelect && siteSelect.value);
+
+    if (truckSummary) {
+        truckSummary.innerHTML = hasTrucks
+            ? `<strong>${selectedTrucks.size}</strong> truck${selectedTrucks.size === 1 ? '' : 's'} selected for this run.`
+            : 'Select one or more trucks to build a convoy.';
+    }
+    if (routeSummary) {
+        routeSummary.innerHTML = hasRoute
+            ? `Destination: <strong>${selectedOption.textContent.split(' — ')[0]}</strong>`
+            : 'Choose a destination to prepare the route.';
+    }
+    if (truckStep) truckStep.classList.toggle('is-ready', hasTrucks);
+    if (routeStep) routeStep.classList.toggle('is-ready', hasRoute);
+    if (verifyStep) verifyStep.classList.toggle('is-ready', Object.keys(activeRuns).length > 0);
 }
 
 // ---------------------------------------------------------------
@@ -3311,6 +3379,23 @@ function updateStatsDisplays() {
     document.getElementById('fleet-total').textContent = fleetTrucks.length;
     document.getElementById('topbar-active-count').textContent = activeCount;
     document.getElementById('topbar-fleet-total').textContent = fleetTrucks.length;
+    updateWorkflowSummary();
+    updateOperationsStrip();
+}
+
+function updateOperationsStrip() {
+    const activeCount = Object.keys(activeRuns).length;
+    const offRouteCount = Object.values(activeRuns).filter(run => run.lastOnRoute === false).length;
+    const liveDot = document.getElementById('ops-live-dot');
+    const liveLabel = document.getElementById('ops-live-label');
+    const activeEl = document.getElementById('ops-active-count');
+    const offRouteEl = document.getElementById('ops-offroute-count');
+    const lastUpdateEl = document.getElementById('ops-last-update');
+    if (liveDot) liveDot.classList.toggle('live', liveTrackingEnabled);
+    if (liveLabel) liveLabel.textContent = liveTrackingEnabled ? 'Live tracking active' : 'Live tracking paused';
+    if (activeEl) activeEl.textContent = activeCount;
+    if (offRouteEl) offRouteEl.textContent = offRouteCount;
+    if (lastUpdateEl) lastUpdateEl.textContent = lastFleetRefreshAt ? timeAgo(lastFleetRefreshAt) : 'Not yet synced';
 }
 
 function timeAgo(date) {
@@ -3614,6 +3699,7 @@ function updateLiveTrackingToggleUI() {
     if (!btn) return;
     btn.classList.toggle('active', liveTrackingEnabled);
     btn.textContent = liveTrackingEnabled ? t('sidebar.liveFleetOn') : t('sidebar.liveFleetOff');
+    updateOperationsStrip();
 }
 
 // Single shared polling loop — runs if EITHER live tracking or notifications
@@ -3645,6 +3731,7 @@ const OFFLINE_AFTER_MINUTES = 30;
 
 // truckId -> { lat, lng, speed, driverName, ageMinutes, status, unitName, matched }
 let fleetLiveData = {};
+let lastFleetRefreshAt = null;
 let liveFleetFilters = { dispatched: true, idle: false, offline: false, all: false };
 let liveTruckMarkers = {}; // truckId -> L.marker
 let liveTrackingEnabled = false;
@@ -3762,9 +3849,11 @@ async function refreshFullFleetLive() {
         };
     });
 
+    lastFleetRefreshAt = new Date();
     renderLiveFleetMarkers();
     renderLiveFleetList();
     updateFleetHeaderStats();
+    updateOperationsStrip();
     renderDashboard();
     renderMonitoringTable();
 
@@ -3813,9 +3902,9 @@ function renderLiveFleetMarkers() {
         const isOffRoute = run && run.lastDeviationBasis === 'route' && run.lastOnRoute === false;
 
         let statusColor;
-        if (isOffRoute) statusColor = '#f87171';       // red
-        else if (data.status === 'moving') statusColor = '#4ade80'; // green
-        else if (data.status === 'idle') statusColor = '#22d3ee';   // cyan
+        if (isOffRoute) statusColor = '#d92d42';       // OMD red
+        else if (data.status === 'moving') statusColor = '#159c83'; // OMD green
+        else if (data.status === 'idle') statusColor = '#167d8d';   // OMD teal
         else statusColor = '#6b7280';                    // gray (offline)
 
         // Directional arrow rotated to the truck's actual compass heading.
