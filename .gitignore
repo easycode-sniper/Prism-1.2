@@ -1,52 +1,61 @@
-# SQL build artifacts and temporary files
-*.sql.bak
-*.sql~
-*.db
-*.sqlite
-*.sqlite3
+```
+# Dependencies
+node_modules/
 
-# General temporary files
-*.tmp
-*.temp
-*.bak
-*~
+# Environment
+.env
+.env.local
+.env.*
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+venv/
+.venv/
+env/
+ENV/
 
 # Logs
 *.log
 
-# Environment files
-.env
-.env.local
-*.env.*
+# Temporary files
+*.tmp
+*.temp
+*~
+.DS_Store
+Thumbs.db
 
-# Editor/IDE files
+# IDE
 .vscode/
 .idea/
 *.swp
 *.swo
 
-# Dependencies and build directories
-node_modules/
-venv/
-.venv/
+# Build artifacts
 dist/
 build/
-target/
-.gradle/
-.mypy_cache/
-.pytest_cache/
-__pycache__/
+*.out
+*.exe
+*.dll
+*.so
+*.a
+*.o
 
-# OS files
-.DS_Store
-Thumbs.db
-
-# Coverage reports
+# Coverage
 coverage/
 htmlcov/
 .coverage
 
-# Compressed files
+# Testing
+.pytest_cache/
+.mypy_cache/
+.nyc_output/
+coverage/lcov-report/
+
+# Compression
 *.zip
 *.gz
 *.tar
@@ -69,3 +78,4 @@ htmlcov/
 *.tar.bz2
 *.tar.xz
 *.tar.zst
+```
