@@ -1072,10 +1072,11 @@ svg.leaflet-image-layer.leaflet-interactive path {
         }
         .brand{ display:flex; align-items:center; gap:10px; }
         .brand-mark{
-            width:32px; height:32px; border-radius:9px;
-            background: linear-gradient(135deg, var(--indigo), var(--purple));
+            width:38px; height:38px; flex:0 0 38px;
             display:flex; align-items:center; justify-content:center;
-            font-size:1rem; box-shadow: 0 0 18px rgba(109,91,255,0.5);
+        }
+        .brand-mark img{
+            display:block; width:100%; height:100%; object-fit:contain;
         }
         .brand h1{ font-family:'IBM Plex Mono', monospace; font-size:1rem; font-weight:600; letter-spacing:.02em; }
         .brand span{ display:block; font-size:.65rem; color:var(--text-dim); letter-spacing:.08em; text-transform:uppercase; margin-top:1px; }
@@ -1434,7 +1435,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 <div id="app-shell">
     <div id="topbar">
         <div class="brand">
-            <div class="brand-mark">🚚</div>
+            <div class="brand-mark"><img src="assets/omd-logo.png" alt="OMD Transport &amp; Logistics logo"></div>
             <div>
                 <h1 data-i18n="brand.title">Fleet Route Monitor</h1>
                 <span data-i18n="brand.subtitle">OMD Transport &middot; Amouda Line</span>
