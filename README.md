@@ -1,78 +1,88 @@
-# prism1.2 - OMD Fleet Route Verification
+# Prism Fleet Operations v1.3
 
-A web-based fleet route verification application built with Leaflet.js for visualizing and verifying driver routes, geofences, and fleet operations.
+A production-ready, multi-user fleet operations and monitoring system built with Next.js, Supabase, and Wialon integration.
 
 ## Features
 
-- **Interactive Map**: Built on Leaflet.js with multiple map layers (Dark, Satellite)
-- **Live Fleet Tracking**: Real-time visualization of fleet vehicles and drivers
-- **Geofence Zones**: Display and manage geofence boundaries
-- **Route Verification**: Verify and validate fleet routes
-- **Multi-language Support**: Internationalization (i18n) with support for multiple languages including:
-  - English
-  - arabic
-  - French
-- **Driver Labels**: Toggle driver name visibility on the map
-- **Theme Support**: Multiple themes (Dark, Light, Black)
-- **Responsive Design**: Works on desktop and mobile devices
+- **Authentication**: Multi-user login with Supabase Auth
+- **Dashboard**: Real-time fleet overview
+- **Persistent State**: All operational data stored in Supabase PostgreSQL
+- **Multi-User Support**: Different employees see the same operational state
+- **Wialon Integration**: Live truck tracking and telemetry
 
-## Technologies Used
+## Quick Start
 
-- **Leaflet.js**: Open-source JavaScript library for interactive maps
-- **HTML5/CSS3**: Modern web standards
-- **JavaScript (ES6+)**: Client-side logic
-- **Mapbox/OSM**: Map tile providers
+### Prerequisites
+
+1. Node.js 18+ installed
+2. A Supabase project with the database schema applied
+3. Wialon SID for telemetry integration
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone <your-repo-url>
+cd prism-1.3
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Create a `.env.local` file in the root directory:
+```
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
+WIALON_SID=your_wialon_sid
+```
+
+4. Run the development server:
+```bash
+npm run dev
+```
+
+5. Open [http://localhost:3000](http://localhost:3000) in your browser
+
+## Database Setup
+
+Run the SQL script `fleet-schema.sql` in your Supabase SQL Editor to create all required tables, policies, and functions.
+
+## Deployment
+
+### Deploy to Vercel
+
+1. Push your code to GitHub
+2. Go to [vercel.com](https://vercel.com)
+3. Import your repository
+4. Add your environment variables in the Vercel dashboard
+5. Deploy!
 
 ## Project Structure
 
 ```
-/workspace
-├── index.html      # Main application (single-page app with embedded CSS/JS)
-├── README.md       # This file
-└── LICENSE         # License information
+src/
+├── app/                  # Next.js App Router pages
+│   ├── login/           # Login page
+│   ├── dashboard/       # Main dashboard
+│   └── layout.tsx       # Root layout
+├── components/          # Reusable React components
+├── hooks/              # Custom React hooks (useAuth, etc.)
+├── lib/                # Core utilities
+│   └── supabase/       # Supabase client configurations
+└── types/              # TypeScript type definitions
 ```
 
-## Usage
+## Architecture
 
-Simply open `index.html` in a modern web browser to launch the application. No build process or server required.
-
-### Map Controls
-
-- **Layer Selection**: Switch between Dark and Satellite map views
-- **Zone Toggle**: Show/hide geofence zones
-- **Name Labels**: Show/hide driver name labels
-- **Theme Switcher**: Change between Dark, Light, and Black themes
-
-### Sidebar Panel
-
-The live fleet panel provides:
-- List of active fleet vehicles
-- Driver information
-- Filter controls
-- Route details
-
-## Development
-
-This is a single-file application where all HTML, CSS, and JavaScript are contained within `index.html`. To modify the application:
-
-1. Edit `index.html` directly
-2. Test changes by refreshing the browser
-3. No build step required
-
-## Browser Compatibility
-
-- Chrome (recommended)
-- Firefox
-- Safari
-- Edge
-- Mobile browsers (iOS Safari, Chrome for Android)
+- **Frontend**: Next.js 14 with TypeScript and Tailwind CSS
+- **Backend**: Supabase (PostgreSQL + Auth + RLS)
+- **Live Telemetry**: Wialon API
+- **Hosting**: Vercel
+- **Authentication**: Supabase Auth with Row Level Security
 
 ## License
 
-See the [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-
-- [Leaflet.js](https://leafletjs.com/) - Interactive maps library
-- [OpenStreetMap](https://www.openstreetmap.org/) - Map data
-- [Mapbox](https://www.mapbox.com/) - Map tiles and services
+See LICENSE file
